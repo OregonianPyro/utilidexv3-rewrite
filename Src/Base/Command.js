@@ -8,6 +8,7 @@ module.exports = class Command {
         extended = false,
         guildOnly = false,
         devOnly = true,
+        staffOnly = false,
         //userPerm, botPerm, permNode
         perms = [null, null, null],
         aliases = []

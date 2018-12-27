@@ -1,4 +1,4 @@
-const { Client, RichEmbed, Collection } = require('discord.js');
+const { Client, MessageEmbed, Collection } = require('discord.js');
 const Enmap = require('enmap');
 const EnmapLevel = require('enmap-level');
 const { promisify } = require('util');
@@ -23,7 +23,7 @@ class Utilidex extends Client {
         this.cmdHelp = (message, command) => {
             const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
             if (!cmd) throw new Error(`Command '${cmd}' not found.`);
-            const embed = new RichEmbed()
+            const embed = new MessageEmbed()
                 .setColor('BLUE')
                 .setAuthor(`${client.user.username} | Command: ${cmd.help.name.split('')[0].toUpperCase()}${cmd.help.name.split('').slice(1).join('')}`, client.user.displayAvatarURL)
                 .setDescription('`< >` denotes a __required__ parameter.\n`[ ]` denotes an optional parameter.')

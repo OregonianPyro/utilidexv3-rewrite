@@ -1,3 +1,5 @@
+const Enmap = require('enmap');
+
 module.exports = { 
     prefix: 'u-',
     logging: {
@@ -117,8 +119,8 @@ module.exports = {
             warnPunish: []
         }
     },
-    tags: [],
-    triggers: [],
+    tags: new Enmap({ name: 'tags' }),
+    triggers: new Enmap({ name: 'triggers' }),
     publicRoles: [],
     disabledCommands: [],
     modLogNum: 0,

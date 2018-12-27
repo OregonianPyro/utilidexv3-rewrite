@@ -2,6 +2,9 @@ const Enmap = require('enmap');
 
 module.exports = {
     guildData: new Enmap({ name: 'guild-data' }),
+    permNodes: new Enmap({ name: 'permNodes' }),
+    tags: new Enmap({ name: 'tags' }),
+    triggers: new Enmap({ name: 'triggers' }),
     clientSettings: new Enmap({ name: 'client-settings'}),
     emotes: {
         check: '<:utilidexPass:454452324413210624>',

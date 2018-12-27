@@ -9,6 +9,18 @@ module.exports = class {
         if (message.channel.type !== 'text') return;
         if (message.author.bot) return;
         this.client.store.guildData.ensure(message.guild.id, this.client.defaultGuildData);
+        // if (!this.client.store.permNodes.has(message.guild.id)) {
+        //     this.client.store.permNodes.set(message.guild.id, { enabled: true });
+        //     const _DB = this.client.store.permNodes.get(message.guild.id);
+        //     message.guild.members.forEach(u => _DB.set(u.user.id, {
+        //         botOwner: [],
+        //         General: [],
+        //         Moderation: [],
+        //         Utility: [],
+        //         Fun: [],
+        //         Fun_Image: []
+        //     }));
+        // };
         message.settings = this.client.store.guildData.get(message.guild.id);
         message.responder = {
             error: (err, embed = false) => {
@@ -32,7 +44,7 @@ module.exports = class {
                     };
                 };
                 data.hasOwnProperty('authorName') && data.hasOwnProperty('authorURL') ? embed.setAuthor(data.authorName, data.authorURL) : null;
-                data.hasOwnProperty('color') ? embed.setColor(data.color) : embed.setColor(message.guild.me.highestRole.hexColor);
+                data.hasOwnProperty('color') ? embed.setColor(data.color) : embed.setColor(message.guild.me.displayHexColor);
                 data.hasOwnProperty('title') ? embed.setTitle(data.title) : null;
                 data.hasOwnProperty('fields') ? (data.fields.length > 0 ? addFields(data.fields) : null) : null;
                 data.hasOwnProperty('thumbnail') ? embed.setThumbnail(data.thumbnail) : null;
@@ -49,9 +61,12 @@ module.exports = class {
         if (!prefixRegex.test(message.content)) return;
         const [ , matchedPrefix ] = message.content.match(prefixRegex);
         const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
-        let command = args.shift().toLowerCase();
-        command = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command));
-        if (!command) return;
+        const argsShift = args.shift().toLowerCase();
+        const command = this.client.commands.get(argsShift) || this.client.commands.get(this.client.aliases.get(argsShift));
+        if (!command) {
+            if (!this.client.store.tags.has(`${message.guild.id}-${argsShift}`)) return;
+            return message.channel.send(this.client.store.tags.get(`${message.guild.id}-${argsShift}`));
+        };
         if (this.client.store.blacklistedUsers.includes(message.author.id)) return;
         this.client.store.disabledCommands.forEach(i => {
             if (i.split('-')[0].toLowerCase() === command) {
